@@ -1,0 +1,15 @@
+{
+  "name": "testgame",
+  "version": "0.0.1",
+  "description": "Test game",
+  "main": "start.js",
+  "scripts": {
+    "start": "node start.js"
+  },
+  "author": "mrpetchenka",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "live-server": "^1.2.1"
+  }
+}
