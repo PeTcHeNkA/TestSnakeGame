@@ -1,141 +1,156 @@
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-const gameOver = document.getElementById("gameOver").getContext("2d");
-
-const groundImg = new Image();
-groundImg.src = "img/ground.png";
-
-const foodImg = new Image();
-foodImg.src = "img/food.png";
-
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+//load image
+let a = new Image(); a.src = 'img/ground.png';
+let b = new Image(); b.src = 'img/food.png';
+let c = new Image(); c.src = 'img/head.png';
+console.log(c)
+let d = new Image(); d.src = 'img/telo.png';
+let e = new Image(); e.src = 'img/jopa.png';
+const imgur = {
+    ground: a,
+    food: b,
+    head: c,
+    telo: d,
+    jopa: e
+};
+//load music
+const music = {
+    death: new Audio('sound/death.mp3'),
+    eating: new Audio('sound/eating.mp3')
+};
+//load font
+var f = new FontFace('PressStart2P', 'url(font/PressStart2P.ttf)');
+f.load().then(function (font) {
+    document.fonts.add(font);
+});
+//config and etc :D
 let box = 32;
-
 let score = 0;
-
 let food = [];
-food[0] = {
-    x: Math.floor((Math.random() * 17 + 1)) * box,
-    y: Math.floor((Math.random() * 15 + 3)) * box,
-};
-food[1] = {
-    x: Math.floor((Math.random() * 17 + 1)) * box,
-    y: Math.floor((Math.random() * 15 + 3)) * box,
-};
-food[2] = {
-    x: Math.floor((Math.random() * 17 + 1)) * box,
-    y: Math.floor((Math.random() * 15 + 3)) * box,
-};
-
 let snake = [];
+let dir;
+//snake spawn
 snake[0] = {
     x: 9 * box,
     y: 10 * box
 };
-
-document.addEventListener("keydown", direction);
-
-let dir;
-
-function direction(event) {
-    if ((event.keyCode == 68 || event.keyCode == 39) && dir != "left")
-        dir = "right";
-    else if ((event.keyCode == 83 || event.keyCode == 40) && dir != "up")
-        dir = "down";
-    else if ((event.keyCode == 65 || event.keyCode == 37) && dir != "right")
-        dir = "left";
-    else if ((event.keyCode == 87 || event.keyCode == 38) && dir != "down")
-        dir = "up";
+//mini-spawner
+toStarter(3)
+function toStarter(i) {
+    //carrot spawn with cooldown
+    toSpawn(0).then(() => {
+        toSpawn(1).then(() => {
+            toSpawn(2).then(() => {})
+        })
+    })
 }
-
+async function toSpawn(i) {
+    await new Promise((resolve, reject) => setTimeout(resolve, 2500));
+    food[i] = {
+        x: Math.floor((Math.random() * 17 + 1)) * box,
+        y: Math.floor((Math.random() * 15 + 3)) * box
+    }
+}
+//eventor register
+document.addEventListener('keydown', direction);
+function direction(event) {
+    if ((event.keyCode == 68 || event.keyCode == 39) && dir != 'left')
+        dir = 'right';
+    else if ((event.keyCode == 83 || event.keyCode == 40) && dir != 'up')
+        dir = 'down';
+    else if ((event.keyCode == 65 || event.keyCode == 37) && dir != 'right')
+        dir = 'left';
+    else if ((event.keyCode == 87 || event.keyCode == 38) && dir != 'down')
+        dir = 'up';
+}
+//game helper
 function eatTail(head, arr) {
     for (let i = 0; i < arr.length; i++) {
         if (head.x == arr[i].x && head.y == arr[i].y) {
             clearInterval(game);
-            ctx.fillStyle = "white";
-            ctx.font = "55px PressStart2P"
-            ctx.textAlign = "center";
-            ctx.fillText("Game Over!", 315, 365);
-            var audio = new Audio('sound/death.mp3');
-            audio.play();
+            gameOverStart();
         }
     }
 }
+function gameOverStart() {
+    clearInterval(game);
+    ctx.fillStyle = 'white';
+    ctx.font = '55px PressStart2P';
+    ctx.textAlighn = 'center';
+    ctx.fillText("Game Over!", 40, 365);
+    music.death.play();
+}
+function checkFood(snakeX,snakeY,food) {
+    return (snakeX == food.x && snakeY == food.y) 
+}
+function checkerWall(snakeX, snakeY,box) {
+    return (snakeX < box || snakeX > box * 17 || snakeY < 3 * box || snakeY > box * 17)
+}
+//start game
+let game = setInterval(drawGame, 100);
 
 function drawGame() {
-
-    ctx.drawImage(groundImg, 0, 0);
-
-    ctx.drawImage(foodImg, food[0].x, food[0].y);
-    ctx.drawImage(foodImg, food[1].x, food[1].y);
-    ctx.drawImage(foodImg, food[2].x, food[2].y);
-
-    for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = i == 0 ? "green" : "red";
-        ctx.fillRect(snake[i].x, snake[i].y, box, box);
-    }
-    var f = new FontFace('PressStart2P', 'url(font/PressStart2P.ttf)');
-
-    f.load().then(function (font) {
-        document.fonts.add(font);
-    });
-    ctx.fillStyle = "white";
-    ctx.font = "50px Arial";
-    ctx.fillText(score, box * 2.5, box * 1.7);
-
+    //mannager snake x,y
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
-
-    function eating() {
-        if ((snakeX == food[0].x && snakeY == food[0].y) || (snakeX == food[1].x && snakeY == food[1].y) || (snakeX == food[2].x && snakeY == food[2].y)) {
-            var audio = new Audio('sound/eating.mp3');
-            score++;
-            audio.play();
-            if ((snakeX == food[0].x && snakeY == food[0].y)) {
-                food[0] = {
-                    x: Math.floor((Math.random() * 17 + 1)) * box,
-                    y: Math.floor((Math.random() * 15 + 3)) * box,
-                };
+    //draw score and ground
+    ctx.drawImage(imgur.ground, 0, 0);
+    ctx.fillStyle = "white";
+    ctx.font = "32px PressStart2P"
+    ctx.fillText(score, box * 2.4, box * 1.7);
+    //draw snake and carrot
+    if(!checkerWall(snakeX,snakeY,box)) {
+        if(food[0] && !checkFood(snakeX,snakeY,food[0])) ctx.drawImage(imgur.food, food[0].x, food[0].y);
+        if(food[1] && !checkFood(snakeX,snakeY,food[1])) ctx.drawImage(imgur.food, food[1].x, food[1].y);
+        if(food[2] && !checkFood(snakeX,snakeY,food[2])) ctx.drawImage(imgur.food, food[2].x, food[2].y);
+        for (let i = 0; i < snake.length; i++) {
+            if(i == 0 ) {
+                ctx.drawImage(imgur.head, snake[i].x, snake[i].y,imgur.head.width/2,imgur.head.height/2);
+                //console.log(imgur.head); 
             }
-            if ((snakeX == food[1].x && snakeY == food[1].y)) {
-                food[1] = {
-                    x: Math.floor((Math.random() * 17 + 1)) * box,
-                    y: Math.floor((Math.random() * 15 + 3)) * box,
-                };
+            else if(i+1 == snake.length && i != 0) {
+                ctx.drawImage(imgur.jopa, snake[i].x, snake[i].y,imgur.head.width/2,imgur.head.height/2);
             }
-            if ((snakeX == food[2].x && snakeY == food[2].y)) {
-                food[2] = {
-                    x: Math.floor((Math.random() * 17 + 1)) * box,
-                    y: Math.floor((Math.random() * 15 + 3)) * box,
-                };
+            else {
+                ctx.drawImage(imgur.telo, snake[i].x, snake[i].y,imgur.head.width/2,imgur.head.height/2);
             }
-        } else snake.pop();
+            //ctx.fillStyle = i == 0 ? "green" : "#00FF7F";
+            //if(i+1 == snake.length && i != 0) ctx.fillStyle = "red"
+            //ctx.fillRect(snake[i].x+5, snake[i].y+5, box-8, box-8);
+            //ctx.beginPath();
+            //ctx.fillStyle = i == 0 ? "#3CB371" : " #00FF7F";
+            //ctx.arc(snake[i].x+15, snake[i].y+15, box/2, 0, 2*Math.PI, false);
+            //ctx.fill();
+        }
     }
-    eating();
+    //checker eating --event
+    if(food[0] && checkFood(snakeX,snakeY,food[0])) eating(0);
+    else if(food[1] && checkFood(snakeX,snakeY,food[1])) eating(1);
+    else if(food[2] && checkFood(snakeX,snakeY,food[2])) eating(2);
+        else snake.pop()
 
-    if (snakeX < box || snakeX > box * 17 || snakeY < 3 * box || snakeY > box * 17) {
-        var audio = new Audio('sound/death.mp3');
-        audio.play();
-        ctx.fillStyle = "white";
-        ctx.font = "55px PressStart2P"
-        ctx.textAlign = "center";
-        ctx.fillText("Game Over!", 315, 365);
-        clearInterval(game)
+    function eating(i) {
+        food[i] = {
+            x: Math.floor((Math.random() * 17 + 1)) * box,
+            y: Math.floor((Math.random() * 15 + 3)) * box
+        }
+        music.eating.play();
+        score++;
+    }
+    //check wall to game over
+    if(checkerWall(snakeX,snakeY,box)) {
+        gameOverStart()
     }
 
     if (dir == "left") snakeX -= box;
     if (dir == "right") snakeX += box;
     if (dir == "up") snakeY -= box;
     if (dir == "down") snakeY += box;
-
     let newHead = {
         x: snakeX,
         y: snakeY
     };
-
     eatTail(newHead, snake);
-
     snake.unshift(newHead);
 }
-
-let game = setInterval(drawGame, 100);
