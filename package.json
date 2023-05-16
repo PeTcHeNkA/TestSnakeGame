@@ -1,13 +1,21 @@
 {
-  "name": "testgame",
-  "version": "0.0.1",
-  "description": "Test game",
+  "name": "testsnakegame",
+  "version": "1.1.0",
+  "description": "A simple and fun snake game",
   "main": "start.js",
   "scripts": {
     "start": "node start.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PeTcHeNkA/TestSnakeGame"
+  },
   "author": "mrpetchenka",
-  "license": "ISC",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "dependencies": {
     "chalk": "^4.1.1",
     "live-server": "^1.2.1"

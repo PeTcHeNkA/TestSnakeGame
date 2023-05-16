@@ -1,2 +1,14 @@
-/node_modules
-/package-lock.json
+# Ignore node_modules folder
+node_modules/
+
+# Ignore live-server logs
+liveserver.log
+
+# Ignore .env files
+.env
+
+# Ignore .DS_Store files
+.DS_Store
+
+# Ignore package-lock file
+package-lock.json
