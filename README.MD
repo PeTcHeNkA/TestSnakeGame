@@ -12,7 +12,7 @@ TestSnakeGame is a simple and fun game where you control a snake and try to eat 
 ## Installation
 1. Clone the GitHub repository.
 ```
-git clone https://github.com/yourusername/TestSnakeGame
+git clone https://github.com/PeTcHeNkA/TestSnakeGame
 ```
 2. Install the dependencies.
 ```

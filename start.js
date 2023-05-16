@@ -14,7 +14,7 @@ var params = {
 
  // The root directory that's being served. Default is the current working directory.
  // You can change it to any relative or absolute path.
- root: path.resolve("./public"),
+ root: path.resolve("./"),
 
  // If false, it won't load the browser by default.
  // You can change it to true if you want to open the browser automatically.
