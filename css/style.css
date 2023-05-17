@@ -1,15 +1,67 @@
 canvas {
-    padding: 0;
-    margin: auto;
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 850px;
+ padding: 0;
+ margin: auto;
+ display: block;
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ height: 850px;
 }
 body {
-    overflow: hidden;
-    background-color: #94eb5a9b;
+ overflow: hidden;
+ background-color: #94eb5a9b;
 }
+#instruction {
+    position: absolute;
+    top: 30%;
+    left: 50px;
+    width: 260px;
+    height: 250px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    font-family: PressStart2P;
+    font-size: 14px;
+  }
+  
+  #instruction h1 {
+    text-align: center;
+    color: green;
+    margin-bottom: 20px;
+  }
+  
+  #instruction p {
+    text-align: justify;
+    color: black;
+    margin-bottom: 10px;
+  }
+  
+  #controls {
+    position: absolute;
+    top: 35%;
+    right: 120px;
+    width: 200px;
+    height: 150px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    font-family: PressStart2P;
+    font-size: 12px;
+  }
+  
+  #controls h2 {
+    text-align: center;
+    color: green;
+    margin-bottom: 20px;
+  }
+  
+  #controls ul {
+    list-style-type: none;
+    text-align: justify;
+    color: black;
+    margin-bottom: 10px;
+  }
